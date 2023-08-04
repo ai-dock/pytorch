@@ -1,0 +1,130 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    
+env:
+  UBUNTU_VERSION: 22.04
+  BUILDX_NO_DEFAULT_ATTESTATIONS: 1
+
+jobs:
+  ubuntu-base:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Env Setter
+        run: |
+          echo "PACKAGE_NAME=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+          echo "TAG=ubuntu-${{ env.UBUNTU_VERSION }}" >> ${GITHUB_ENV}
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: build
+          build-args: |
+            IMAGE_BASE=ghcr.io/ai-dock/base-image:ubuntu-${{ env.UBUNTU_VERSION }}
+            MAMBA_DEFAULT_ENV=system
+          push: true
+          # Avoids unknown/unknown architecture and extra metadata
+          provenance: false
+          tags: |
+            ghcr.io/${{ env.PACKAGE_NAME }}:${{ env.TAG }}
+    
+  nvidia-base:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cuda:
+          - 11.8.0
+          - 12.1.0
+          - 12.2.0
+        level:
+          - "base"
+          - "runtime"
+          - "devel"
+          - "cudnn8-runtime"
+          - "cudnn8-devel"
+        exclude:
+          - cuda: 12.2.0
+            level: "cudnn8-runtime" # Not yet available
+          - cuda: 12.2.0
+            level: "cudnn8-devel" # Not yet available
+    steps:
+      -
+        name: Env Setter
+        run: |
+          echo "PACKAGE_NAME=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+          echo "TAG=cuda-${{ matrix.cuda }}-${{ matrix.level }}-${{ env.UBUNTU_VERSION }}" >> ${GITHUB_ENV}
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: build
+          build-args: |
+            IMAGE_BASE=ghcr.io/ai-dock/base-image:cuda-${{ matrix.cuda }}-${{ matrix.level }}-${{ env.UBUNTU_VERSION }}
+            MAMBA_DEFAULT_ENV=system
+          push: true
+          provenance: false
+          tags: |
+            ghcr.io/${{ env.PACKAGE_NAME }}:${{ env.TAG }}
+
+  amd-base:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rocm:
+          - 5.4.1
+        level:
+          - "core"
+          - "runtime"
+          - "devel"
+    steps:
+      -
+        name: Env Setter
+        run: |
+          echo "PACKAGE_NAME=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+          echo "TAG=rocm-${{ matrix.rocm }}-${{ matrix.level }}-${{ env.UBUNTU_VERSION }}" >> ${GITHUB_ENV}
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: build
+          build-args: |
+            IMAGE_BASE=ghcr.io/ai-dock/base-image:rocm-${{ matrix.rocm }}-${{ matrix.level }}-${{ env.UBUNTU_VERSION }}
+            MAMBA_DEFAULT_ENV=system
+          push: true
+          provenance: false
+          tags: |
+            ghcr.io/${{ env.PACKAGE_NAME }}:${{ env.TAG }}

@@ -4,5 +4,12 @@
 set -e
 
 # For CPU specific processes
+# Mamba will downgrade python to satisfy requirements. We don't want that.
+python_lock=$(micromamba -n $MAMBA_DEFAULT_ENV run python -V|awk '{print $2}'|cut -d '.' -f1,2)
 
-exit 0
+micromamba -n $MAMBA_DEFAULT_ENV install -y \
+    -c pytorch \
+    -c conda-forge \
+    python=${python_lock} \
+    pytorch=${PYTORCH_VERSION} torchvision torchaudio cpuonly \
+    

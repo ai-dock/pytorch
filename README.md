@@ -1,14 +1,18 @@
-*** Add a relevant title
-# Base Image Extension
+# Python
 
-All ai-dock images are extended from the [base image](https://github.com/ai-dock/base-image).
+Run python in a container with pytorch pre-installed.
 
-*** This file should form the basis for the README.md for all extended images, with appropriate edits where indicated by asterisks and with additional features documented as required.
+## About Pytorch
+
+PyTorch is an open-source deep learning framework developed by Facebook's AI Research lab (FAIR). It provides a flexible and dynamic computational graph, allowing developers to build and train neural networks. Unlike some other frameworks, PyTorch enables defining and modifying network architectures on-the-fly, making experimentation and debugging easier.
+
+One of PyTorch's essential features is automatic differentiation, which is crucial for training neural networks using gradient-based optimization algorithms like backpropagation. Additionally, PyTorch supports GPU acceleration, enabling faster computation during model training.
+
+The framework has gained popularity among researchers and developers due to its ease of use and extensive community support. With a large and active community, users can find abundant resources, tutorials, and libraries to support their deep learning projects.
 
 ## Pre-built Images
 
-*** Edit packages link
-Docker images are built automatically through a GitHub Actions workflow and hosted at the GitHub Container Registry. 
+Docker images are built automatically through a GitHub Actions workflow and hosted at the GitHub Container Registry.
 
 #### Version Tags
 
@@ -16,17 +20,23 @@ There is no `latest` tag.
 Tags follow these patterns:
 
 ##### _CUDA_
-`:[software-version(s)]-cuda-[x.x.x]{-cudnn[x]}-[base|runtime|devel]-[ubuntu-version]`
+`:[pytorch-version]-py[python-version]-cuda-[x.x.x]-base-[ubuntu-version]`
 
 ##### _ROCm_
-`:[software-version(s)]-rocm-[x.x.x]-[core|runtime|devel]-[ubuntu-version]`
+`:[pytorch-version]-py[python-version]-rocm-[x.x.x]-runtime-[ubuntu-version]`
 
 ##### _CPU_
-`:[software-version(s)]-ubuntu-[ubuntu-version]`
+`:[pytorch-version]-py[python-version]-ubuntu-[ubuntu-version]`
 
-Browse [here](https://github.com/ai-dock/extended-image-template/pkgs/container/extended-image-template) for an image suitable for your target environment.
+Browse [here](https://github.com/ai-dock/pytorch/pkgs/container/pytorch) for an image suitable for your target environment.
 
 You can also self-build from source by editing `.env` and running `docker compose build`.
+
+Supported Python versions: `3.11`, `3.10`, `3.9`, `3.8`
+
+Supported Pytorch versions: `2.0.1`, `1.13.1` 
+
+Supported Platforms: `NVIDIA CUDA`, `AMD ROCm`, `CPU`
 
 ## Run Locally
 
@@ -36,17 +46,11 @@ If you prefer to use the standard `docker run` syntax, the command to pass is `i
 
 ## Run in the Cloud
 
-This image should be compatible with any GPU cloud platform. You simply need to pass environment variables at runtime. Please raise an issue on this repository if your provider cannot run the image.
-
 __Container Cloud__
 
 Container providers don't give you access to the docker host but are quick and easy to set up. They are often inexpensive when compared to a full VM or bare metal solution.
 
-*** These links should point to one of the pre-configured templates
-All images built for ai-dock are tested for compatibility with both [vast.ai](https://cloud.vast.ai/?ref=62897) and [runpod.io](https://runpod.io?ref=m0vk9g4f).
-
-*** Paperspace will require detailed setup instructions and has no port mapping.
-Images that include Jupyter are also tested to ensure compatibility with [Paperspace Gradient](https://console.paperspace.com/signup?R=FI2IEQI)
+All images built for ai-dock are tested for compatibility with both [vast.ai](https://cloud.vast.ai/?ref_id=62897) and [runpod.io](https://runpod.io/gsc?ref=m0vk9g4f).
 
 See a list of pre-configured templates [here](#pre-configured-templates)
 
@@ -80,7 +84,6 @@ This is the preferred method. You will only need to expose `port 22` (SSH) which
 
 If you are unfamiliar with port forwarding then you should read the guides [here](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys?refcode=405a7b000d31#setting-up-ssh-tunnels) and [here](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-tunneling-on-a-vps?refcode=405a7b000d31).
 
-*** Add any addditional vars to this table
 ## Environment Variables
 
 | Variable              | Description |
@@ -94,7 +97,7 @@ If you are unfamiliar with port forwarding then you should read the guides [here
 
 Environment variables can be specified by using any of the standard methods (`docker-compose.yaml`, `docker run -e...`). Additionally, environment variables can also be passed as parameters of `init.sh`.
 
-Passing environment variables to `init.sh` is usually unnecessary, but may be useful in some cloud environments where the full `docker run` command cannot be specified.
+Passing environment variables to init.sh is usually unnecessary, but is useful for some cloud environments where the full `docker run` command cannot be specified.
 
 Example usage: `docker run -e STANDARD_VAR1="this value" -e STANDARD_VAR2="that value" init.sh EXTRA_VAR="other value"`
 
@@ -106,13 +109,13 @@ All other software is installed into its own environment by `micromamba`, which 
 
 Micromamba environments are particularly useful where several software packages are required but their dependencies conflict. 
 
-*** Update this table
 ### Installed Micromamba Environments
 
 | Environment    | Packages / Rationale |
 | -------------- | ----------------------------------------- |
 | `base`         | micromamba's base environment |
 | `system`       | `supervisord`, `rclone` - latest versions |
+| `python_[ver]` | `python` |
 
 If you are extending this image or running an interactive session where additional software is required, you should almost certainly create a new environment first. See below for guidance.
 
@@ -137,7 +140,7 @@ Data inside docker containers is ephemeral - You'll lose all of it when the cont
 
 You may opt to mount a data volume at `/workspace` - This is a directory that ai-dock images will look for to make downloaded data available outside of the container for persistence. 
 
-This is usually of importance where large files are downloaded at runtime.  Any image that makes use of this directory should replace this paragraph and document how and why /workspace is being utilised.
+This is usually of importance where large files are downloaded at runtime or if you need a space to save your work. This is the ideal location to store any code you are working on.
 
 You can define an alternative path for the workspace directory by passing the environment variable `WORKSPACE=/my/alternative/path/` and mounting your volume there. This feature will generally assist where cloud providers enforce their own mountpoint location for persistent storage.
 
@@ -179,7 +182,7 @@ See [this guide](https://www.digitalocean.com/community/tutorials/ssh-essentials
 >[!NOTE]  
 >_SSHD is included because the end-user should be able to know the version prior to deloyment. Using a providers add-on, if available, does not guarantee this._
 
-### Rclone Mount
+### Rclone mount
 
 Rclone allows you to access your cloud storage from within the container by configuring one or more remotes. If you are unfamiliar with the project you can find out more at the [Rclone website](https://rclone.org/).
 
@@ -214,20 +217,26 @@ If you are logged into the container you can follow the logs by running `logtail
 
 ## Open Ports
 
-Some ports need to be exposed for the services to run or for certain features of the provided software to function.
+Some ports need to be exposed for the services to run or for certain features of the provided software to function
 
-*** Update this table
+
 | Open Port             | Service / Description |
 | --------------------- | --------------------- |
 | `22`                  | SSH server            |
 | `53682`               | Rclone interactive config |
 
-
 ## Pre-Configured Templates
 
-There are no templates for the base image
+**Vast.​ai**
 
-*** List each provider under its own heading
+[Python All](#todo)
+
+**Runpod.​io**
+
+[Python All](#todo)
+
+>[!NOTE]  
+>These templates are configured to use Python `3.10` with Pytorch `2.0.1` but you are free to change to any of the available Pytorch CUDA tags listed [here](https://github.com/ai-dock/pytorch/pkgs/container/pytorch)
 
 ## Compatible VM Providers
 

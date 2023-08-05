@@ -6,10 +6,10 @@ services:
       context: ./build
       args:
         IMAGE_BASE: ${IMAGE_BASE}
-        MAMBA_DEFAULT_ENV: ${MAMBA_DEFAULT_ENV}
+        PYTORCH_VERSION: ${PYTORCH_VERSION}
       tags:
-        - "ghcr.io/ai-dock/extended-base-template:${IMAGE_TAG}"
-    image: ghcr.io/ai-dock/extended-base-template:${IMAGE_TAG}
+        - "ghcr.io/ai-dock/pytorch:${IMAGE_TAG}"
+    image: ghcr.io/ai-dock/pytorch:${IMAGE_TAG}
     security_opt:
       - apparmor:unconfined
     cap_add:

@@ -8,11 +8,16 @@ on:
 env:
   UBUNTU_VERSION: 22.04
   BUILDX_NO_DEFAULT_ATTESTATIONS: 1
+  # Until py3.11 is available on all platforms
+  LATEST_CUDA: "2.0.1-py3.10-cuda-11.8.0-base-22.04"
+  LATEST_ROCM: "2.0.1-py3.10-rocm-5.4.2-runtime-22.04"
+  LATEST_CPU: "2.0.1-py3.10-cpu-22.04"
 
 jobs:
-  ubuntu-base:
+  cpu-base:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python:
           - "3.8"
@@ -30,7 +35,6 @@ jobs:
         name: Env Setter
         run: |
           echo "PACKAGE_NAME=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
-          echo "TAG=${{ matrix.pytorch }}-py${{ matrix.python }}-ubuntu-${{ env.UBUNTU_VERSION }}" >> ${GITHUB_ENV}
       -
         name: Checkout
         uses: actions/checkout@v3
@@ -42,6 +46,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       -
+        name: Set tags
+        run: |
+          img_path="ghcr.io/${{ env.PACKAGE_NAME }}"
+          ver_tag="${{ matrix.pytorch }}-py${{ matrix.python }}-cpu-${{ env.UBUNTU_VERSION }}"
+          
+          if [[ $ver_tag == ${{ env.LATEST_CPU }} ]]; then
+              TAGS="${img_path}:latest-cpu, ${img_path}:$ver_tag"
+          else
+              TAGS="${img_path}:$ver_tag"
+          fi
+          echo "TAGS=${TAGS}" >> ${GITHUB_ENV}
+      -
         name: Build and push
         uses: docker/build-push-action@v4
         with:
@@ -52,12 +68,12 @@ jobs:
           push: true
           # Avoids unknown/unknown architecture and extra metadata
           provenance: false
-          tags: |
-            ghcr.io/${{ env.PACKAGE_NAME }}:${{ env.TAG }}
+          tags: ${{ env.TAGS }}
     
   nvidia-base:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python:
           - "3.8"
@@ -82,7 +98,6 @@ jobs:
         name: Env Setter
         run: |
           echo "PACKAGE_NAME=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
-          echo "TAG=${{ matrix.pytorch }}-py${{ matrix.python }}-cuda-${{ matrix.cuda }}-${{ matrix.level }}-${{ env.UBUNTU_VERSION }}" >> ${GITHUB_ENV}
       -
         name: Checkout
         uses: actions/checkout@v3
@@ -94,8 +109,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       -
+        name: Set tags
+        run: |
+          img_path="ghcr.io/${{ env.PACKAGE_NAME }}"
+          ver_tag="${{ matrix.pytorch }}-py${{ matrix.python }}-cuda-${{ matrix.cuda }}-${{ matrix.level }}-${{ env.UBUNTU_VERSION }}"
+          
+          if [[ $ver_tag == ${{ env.LATEST_CUDA }} ]]; then
+              TAGS="${img_path}:latest, ${img_path}:latest-cuda, ${img_path}:$ver_tag"
+          else
+              TAGS="${img_path}:$ver_tag"
+          fi
+          echo "TAGS=${TAGS}" >> ${GITHUB_ENV}
+      -
         name: Build and push
         uses: docker/build-push-action@v4
+        needs: set_tags
         with:
           context: build
           build-args: |
@@ -103,12 +131,12 @@ jobs:
             PYTORCH_VERSION=${{ matrix.pytorch }}
           push: true
           provenance: false
-          tags: |
-            ghcr.io/${{ env.PACKAGE_NAME }}:${{ env.TAG }}
+          tags: ${{ env.TAGS }}
 
   amd-base:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python:
           - "3.8"
@@ -130,7 +158,6 @@ jobs:
         name: Env Setter
         run: |
           echo "PACKAGE_NAME=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
-          echo "TAG=${{ matrix.pytorch }}-py${{ matrix.python }}-rocm-${{ matrix.rocm }}-${{ matrix.level }}-${{ env.UBUNTU_VERSION }}" >> ${GITHUB_ENV}
       -
         name: Checkout
         uses: actions/checkout@v3
@@ -142,6 +169,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       -
+        name: Set tags
+        run: |
+          img_path="ghcr.io/${{ env.PACKAGE_NAME }}"
+          ver_tag="${{ matrix.pytorch }}-py${{ matrix.python }}-rocm-${{ matrix.rocm }}-${{ matrix.level }}-${{ env.UBUNTU_VERSION }}"
+          
+          if [[ $ver_tag == ${{ env.LATEST_ROCM }} ]]; then
+              TAGS="${img_path}:latest-rocm, ${img_path}:$ver_tag"
+          else
+              TAGS="${img_path}:$ver_tag"
+          fi
+          echo "TAGS=${TAGS}" >> ${GITHUB_ENV}
+      -
         name: Build and push
         uses: docker/build-push-action@v4
         with:
@@ -151,5 +190,4 @@ jobs:
             PYTORCH_VERSION=${{ matrix.pytorch }}
           push: true
           provenance: false
-          tags: |
-            ghcr.io/${{ env.PACKAGE_NAME }}:${{ env.TAG }}
+          tags: ${{ env.TAGS }}

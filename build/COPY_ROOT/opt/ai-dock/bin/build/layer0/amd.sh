@@ -20,4 +20,4 @@ micromamba -n $MAMBA_DEFAULT_ENV install -y \
 micromamba -n $MAMBA_DEFAULT_ENV run pip install \
     --no-cache-dir \
     --index-url https://download.pytorch.org/whl/rocm${ROCM_VERSION} \
-    torch torchvision torchaudio
+    torch==${PYTORCH_VERSION} torchvision torchaudio

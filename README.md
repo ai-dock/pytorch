@@ -1,4 +1,4 @@
-# Python
+# Pytorch
 
 Run python in a container with pytorch pre-installed.
 
@@ -16,17 +16,24 @@ Docker images are built automatically through a GitHub Actions workflow and host
 
 #### Version Tags
 
-There is no `latest` tag.
+The `:latest` tag points to `:latest-cuda`
+
 Tags follow these patterns:
 
 ##### _CUDA_
-`:[pytorch-version]-py[python-version]-cuda-[x.x.x]-base-[ubuntu-version]`
+- `:[pytorch-version]-py[python-version]-cuda-[x.x.x]-base-[ubuntu-version]`
+
+- `:latest-cuda` -> `:2.0.1-py3.10-cuda-11.8.0-base-22.04`
 
 ##### _ROCm_
-`:[pytorch-version]-py[python-version]-rocm-[x.x.x]-runtime-[ubuntu-version]`
+- `:[pytorch-version]-py[python-version]-rocm-[x.x.x]-runtime-[ubuntu-version]`
+
+- `:latest-rocm` -> `:2.0.1-py3.10-rocm-5.4.2-runtime-22.04`
 
 ##### _CPU_
-`:[pytorch-version]-py[python-version]-ubuntu-[ubuntu-version]`
+- `:[pytorch-version]-py[python-version]-ubuntu-[ubuntu-version]`
+
+- `:latest-cpu` -> `:2.0.1-py3.10-cpu-22.04` 
 
 Browse [here](https://github.com/ai-dock/pytorch/pkgs/container/pytorch) for an image suitable for your target environment.
 
@@ -46,11 +53,16 @@ If you prefer to use the standard `docker run` syntax, the command to pass is `i
 
 ## Run in the Cloud
 
+This image should be compatible with any GPU cloud platform. You simply need to pass environment variables at runtime. 
+
+>[!NOTE]  
+>Please raise an issue on this repository if your provider cannot run the image.
+
 __Container Cloud__
 
 Container providers don't give you access to the docker host but are quick and easy to set up. They are often inexpensive when compared to a full VM or bare metal solution.
 
-All images built for ai-dock are tested for compatibility with both [vast.ai](https://cloud.vast.ai/?ref_id=62897) and [runpod.io](https://runpod.io/gsc?ref=m0vk9g4f).
+All images built for ai-dock are tested for compatibility with both [vast.ai](https://cloud.vast.ai/?ref_id=62897&template_id=ddb27bae1a0b725596913a4b9fb34c62) and [runpod.io](https://runpod.io/gsc?template=7shebc1gr8&ref=m0vk9g4f).
 
 See a list of pre-configured templates [here](#pre-configured-templates)
 
@@ -89,6 +101,7 @@ If you are unfamiliar with port forwarding then you should read the guides [here
 | Variable              | Description |
 | --------------------- | ----------- |
 | `GPU_COUNT`           | Limit the number of available GPUs |
+| `PROVISIONING_SCRIPT` | URL of a remote script to execute on init. See [note](#provisioning-script). |
 | `RCLONE_*`            | Rclone configuration - See [rclone documentation](https://rclone.org/docs/#config-file) |
 | `SKIP_ACL`            | Set `true` to skip modifying workspace ACL |
 | `SSH_PUBKEY`          | Your public key for SSH |
@@ -100,6 +113,20 @@ Environment variables can be specified by using any of the standard methods (`do
 Passing environment variables to init.sh is usually unnecessary, but is useful for some cloud environments where the full `docker run` command cannot be specified.
 
 Example usage: `docker run -e STANDARD_VAR1="this value" -e STANDARD_VAR2="that value" init.sh EXTRA_VAR="other value"`
+
+## Provisioning script
+
+It can be useful to perform certain actions when starting a container, such as creating directories and downloading files.
+
+You can use the environment variable `PROVISIONING_SCRIPT` to specify the URL of a script you'd like to run.
+
+If you are running locally you may instead opt to mount an executable script at `/opt/ai-dock/bin/provisioning.sh`.
+
+>[!NOTE]  
+>`supervisord` will not spawn any processes until the provisioning script has completed.
+
+>[!WARNING]  
+>Only use scripts that you trust and which cannot be changed without your consent.
 
 ## Software Management
 
@@ -229,18 +256,18 @@ Some ports need to be exposed for the services to run or for certain features of
 
 **Vast.​ai**
 
-[Python All](#todo)
+[pytorch:latest](https://cloud.vast.ai/?ref_id=62897&template_id=ddb27bae1a0b725596913a4b9fb34c62)
 
 **Runpod.​io**
 
-[Python All](#todo)
+[pytorch:latest](https://runpod.io/gsc?template=7shebc1gr8&ref=m0vk9g4f)
 
 >[!NOTE]  
->These templates are configured to use Python `3.10` with Pytorch `2.0.1` but you are free to change to any of the available Pytorch CUDA tags listed [here](https://github.com/ai-dock/pytorch/pkgs/container/pytorch)
+>These templates are configured to use the `:latest` tag but you are free to change to any of the available Pytorch CUDA tags listed [here](https://github.com/ai-dock/pytorch/pkgs/container/pytorch)
 
 ## Compatible VM Providers
 
-Images that do not require a GPU will run anywhere - Use an image tagged `:*-ubuntu-xx.xx`
+Images that do not require a GPU will run anywhere - Use an image tagged `:*-cpu-xx.xx`
 
 Where a GPU is required you will need either `:*cuda*` or `:*rocm*` depending on the underlying hardware.
 

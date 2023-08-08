@@ -63,7 +63,7 @@ jobs:
         with:
           context: build
           build-args: |
-            IMAGE_BASE=ghcr.io/ai-dock/python:${{ matrix.python }}-ubuntu-${{ env.UBUNTU_VERSION }}
+            IMAGE_BASE=ghcr.io/ai-dock/python:${{ matrix.python }}-cpu-${{ env.UBUNTU_VERSION }}
             PYTORCH_VERSION=${{ matrix.pytorch }}
           push: true
           # Avoids unknown/unknown architecture and extra metadata
@@ -123,7 +123,6 @@ jobs:
       -
         name: Build and push
         uses: docker/build-push-action@v4
-        needs: set_tags
         with:
           context: build
           build-args: |

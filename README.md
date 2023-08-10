@@ -62,7 +62,7 @@ __Container Cloud__
 
 Container providers don't give you access to the docker host but are quick and easy to set up. They are often inexpensive when compared to a full VM or bare metal solution.
 
-All images built for ai-dock are tested for compatibility with both [vast.ai](https://cloud.vast.ai/?ref_id=62897&template_id=ddb27bae1a0b725596913a4b9fb34c62) and [runpod.io](https://runpod.io/gsc?template=7shebc1gr8&ref=m0vk9g4f).
+All images built for ai-dock are tested for compatibility with both [vast.ai](https://link.ai-dock.org/template-vast-pytorch) and [runpod.io](https://link.ai-dock.org/template-runpod-pytorch).
 
 See a list of pre-configured templates [here](#pre-configured-templates)
 
@@ -94,7 +94,7 @@ _**SSH Tunnel**_
 
 This is the preferred method. You will only need to expose `port 22` (SSH) which can then be used with port forwarding to allow **secure** connections to your services.
 
-If you are unfamiliar with port forwarding then you should read the guides [here](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys?refcode=405a7b000d31#setting-up-ssh-tunnels) and [here](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-tunneling-on-a-vps?refcode=405a7b000d31).
+If you are unfamiliar with port forwarding then you should read the guides [here](https://link.ai-dock.org/guide-ssh-tunnel-do-a) and [here](https://link.ai-dock.org/guide-ssh-tunnel-do-b).
 
 ## Environment Variables
 
@@ -204,7 +204,7 @@ If you choose not to provide a public key then the SSH server will not be starte
 
 To make use of this service you should map `port 22` to a port of your choice on the host operating system.
 
-See [this guide](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys?refcode=405a7b000d31#) by DigitalOcean for an excellent introduction to working with SSH servers.
+See [this guide](https://link.ai-dock.org/guide-sshd-do) by DigitalOcean for an excellent introduction to working with SSH servers.
 
 >[!NOTE]  
 >_SSHD is included because the end-user should be able to know the version prior to deloyment. Using a providers add-on, if available, does not guarantee this._
@@ -256,11 +256,11 @@ Some ports need to be exposed for the services to run or for certain features of
 
 **Vast.​ai**
 
-[pytorch:latest](https://cloud.vast.ai/?ref_id=62897&template_id=ddb27bae1a0b725596913a4b9fb34c62)
+[pytorch:latest](https://link.ai-dock.org/template-vast-pytorch)
 
 **Runpod.​io**
 
-[pytorch:latest](https://runpod.io/gsc?template=7shebc1gr8&ref=m0vk9g4f)
+[pytorch:latest](https://link.ai-dock.org/template-runpod-pytorch)
 
 >[!NOTE]  
 >These templates are configured to use the `:latest` tag but you are free to change to any of the available Pytorch CUDA tags listed [here](https://github.com/ai-dock/pytorch/pkgs/container/pytorch)
@@ -273,10 +273,10 @@ Where a GPU is required you will need either `:*cuda*` or `:*rocm*` depending on
 
 A curated list of VM providers currently offering GPU instances:
 
-- [Akami/Linode](https://www.linode.com/lp/refer/?r=d49cf667cec6bcbb6c2d7d70665c5c9b9a5a4b95)
-- [Amazon Web Services](https://aws.amazon.com)
-- [Google Compute Engine](https://cloud.google.com)
-- [Vultr](https://www.vultr.com/?ref=9519053-8H)
+- [Akami/Linode](https://link.ai-dock.org/linode.com)
+- [Amazon Web Services](https://link.ai-dock.org/aws.amazon.com)
+- [Google Compute Engine](https://link.ai-dock.org/cloud.google.com)
+- [Vultr](https://link.ai-dock.org/vultr.com)
 
 ---
 

@@ -1,4 +1,4 @@
-[![Build](https://github.com/ai-dock/pytorch/actions/workflows/docker-image.yml/badge.svg)](https://github.com/ai-dock/pytorch/actions/workflows/docker-image.yml)
+[![Docker Build](https://github.com/ai-dock/pytorch/actions/workflows/docker-image.yml/badge.svg)](https://github.com/ai-dock/pytorch/actions/workflows/docker-image.yml)
 
 # Pytorch
 

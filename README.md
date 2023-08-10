@@ -1,3 +1,5 @@
+[![Build](https://github.com/ai-dock/pytorch/actions/workflows/docker-image.yml/badge.svg)](https://github.com/ai-dock/pytorch/actions/workflows/docker-image.yml)
+
 # Pytorch
 
 Run python in a container with pytorch pre-installed.

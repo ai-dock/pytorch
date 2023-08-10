@@ -87,7 +87,9 @@ jobs:
           - "11.7.1"
           - "11.8.0"
         level:
-          - base
+          - "base"
+          - "devel"
+          - "cudnn8-devel"
         exclude:
           - pytorch: "1.13.1"
             python: "3.11"
@@ -147,7 +149,7 @@ jobs:
         rocm:
           - "5.4.2"
         level:
-          - runtime
+          - "runtime"
         # Templating for future releases
         exclude:
           - pytorch: "2.0.1"

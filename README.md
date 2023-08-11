@@ -1,4 +1,4 @@
-[![Docker Build](https://github.com/ai-dock/pytorch/actions/workflows/docker-image.yml/badge.svg)](https://github.com/ai-dock/pytorch/actions/workflows/docker-image.yml)
+[![Docker Build](https://github.com/ai-dock/pytorch/actions/workflows/docker-build.yml/badge.svg)](https://github.com/ai-dock/pytorch/actions/workflows/docker-build.yml)
 
 # Pytorch
 
@@ -106,6 +106,7 @@ If you are unfamiliar with port forwarding then you should read the guides [here
 | `PROVISIONING_SCRIPT` | URL of a remote script to execute on init. See [note](#provisioning-script). |
 | `RCLONE_*`            | Rclone configuration - See [rclone documentation](https://rclone.org/docs/#config-file) |
 | `SKIP_ACL`            | Set `true` to skip modifying workspace ACL |
+| `SSH_PORT`            | Set a non-standard port for SSH (default 22) |
 | `SSH_PUBKEY`          | Your public key for SSH |
 | `WORKSPACE`           | A volume path. Defaults to `/workspace/` |
 
@@ -132,7 +133,7 @@ If you are running locally you may instead opt to mount an executable script at 
 
 ## Software Management
 
-A small software collection is installed by apt-get. This is mostly to provide basic functionality, but also includes `openssh-server` as the OS vendor is likely to be first to patch any security issues.
+A small software collection is installed by apt-get to provide basic utility.
 
 All other software is installed into its own environment by `micromamba`, which is a drop-in replacement for conda/mamba. Read more about it [here](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html).
 
@@ -140,10 +141,10 @@ Micromamba environments are particularly useful where several software packages 
 
 ### Installed Micromamba Environments
 
-| Environment    | Packages / Rationale |
+| Environment    | Packages |
 | -------------- | ----------------------------------------- |
 | `base`         | micromamba's base environment |
-| `system`       | `supervisord`, `rclone` - latest versions |
+| `system`       | `supervisord`, `openssh` `rclone` |
 | `python_[ver]` | `python` |
 
 If you are extending this image or running an interactive session where additional software is required, you should almost certainly create a new environment first. See below for guidance.
@@ -193,6 +194,8 @@ All processes are managed by [supervisord](https://supervisord.readthedocs.io/en
 ### SSHD
 
 A SSH server will be started if at least one valid public key is found inside the running container in the file `/root/.ssh/authorized_keys`
+
+The server will bind to `port 22` unless you specify variable `SSH_PORT`.
 
 There are several ways to get your keys to the container.
 

@@ -7,7 +7,7 @@ cuda_short_version=$(cut -d '.' -f 1,2 <<< "${CUDA_VERSION}")
 # Mamba will downgrade python to satisfy requirements. We don't want that.
 python_lock=$(micromamba -n $MAMBA_DEFAULT_ENV run python -V|awk '{print $2}'|cut -d '.' -f1,2)
 
-micromamba -n $MAMBA_DEFAULT_ENV install -y \
+$MAMBA_INSTALL -n $MAMBA_DEFAULT_ENV \
     -c pytorch \
     -c nvidia \
     -c conda-forge \

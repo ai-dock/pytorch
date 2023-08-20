@@ -1,11 +1,13 @@
-#!/bin/bash
+#!/bin/false
 
-function main() {
-    do_something
+# This file will be sourced in init.sh
+
+function preflight_main() {
+    preflight_do_something
 }
 
-function do_something() {
+function preflight_do_something() {
     printf "Empty preflight.sh...\n"
 }
 
-main "$@"; exit
+preflight_main "$@"

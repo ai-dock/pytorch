@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Must exit and fail to build if any command fails
-set -e
+set -eo pipefail
 
 # For CPU specific processes
 # Mamba will downgrade python to satisfy requirements. We don't want that.

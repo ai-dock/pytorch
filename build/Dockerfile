@@ -9,6 +9,7 @@ LABEL org.opencontainers.image.description "Python with pytorch pre-installed"
 
 LABEL maintainer="Rob Ballantyne <rob@dynamedia.uk>"
 
+ENV IMAGE_SLUG="pytorch"
 # Note: the default mamba environment is set by ai-dock/python
 
 # Add new paths at front 

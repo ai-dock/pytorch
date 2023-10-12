@@ -32,17 +32,17 @@ Tags follow these patterns:
 ##### _CUDA_
 - `:[pytorch-version]-py[python-version]-cuda-[x.x.x]-base-[ubuntu-version]`
 
-- `:latest-cuda` &rarr; `:2.0.1-py3.10-cuda-11.8.0-base-22.04`
+- `:latest-cuda` &rarr; `:2.1.0-py3.10-cuda-11.8.0-base-22.04`
 
 ##### _ROCm_
 - `:[pytorch-version]-py[python-version]-rocm-[x.x.x]-runtime-[ubuntu-version]`
 
-- `:latest-rocm` &rarr; `:2.0.1-py3.10-rocm-5.4.2-runtime-22.04`
+- `:latest-rocm` &rarr; `:2.1.0-py3.10-rocm-5.6-runtime-22.04`
 
 ##### _CPU_
 - `:[pytorch-version]-py[python-version]-ubuntu-[ubuntu-version]`
 
-- `:latest-cpu` &rarr; `:2.0.1-py3.10-cpu-22.04` 
+- `:latest-cpu` &rarr; `:2.1.0-py3.10-cpu-22.04` 
 
 Browse [here](https://github.com/ai-dock/pytorch/pkgs/container/pytorch) for an image suitable for your target environment.
 
@@ -50,7 +50,7 @@ You can also self-build from source by editing `.env` and running `docker compos
 
 Supported Python versions: `3.11`, `3.10`, `3.9`, `3.8`
 
-Supported Pytorch versions: `2.0.1`, `1.13.1` 
+Supported Pytorch versions: `2.1.0` `2.0.1`, `1.13.1` 
 
 Supported Platforms: `NVIDIA CUDA`, `AMD ROCm`, `CPU`
 
@@ -121,13 +121,29 @@ You can use the included `cloudflared` service to make secure connections withou
 | `SKIP_ACL`            | Set `true` to skip modifying workspace ACL |
 | `SSH_PORT`            | Set a non-standard port for SSH (default `22`) |
 | `SSH_PUBKEY`          | Your public key for SSH |
+| `WEB_ENABLE_AUTH`     | Enable password protection for web services (default `true`) |
+| `WEB_USER`            | Username for web services (default `user`) |
+| `WEB_PASSWORD`        | Password for web services (default `password`) |
 | `WORKSPACE`           | A volume path. Defaults to `/workspace/` |
+| `WORKSPACE_SYNC`      | Move mamba environments and services to workspace if mounted (default `true`) |
 
 Environment variables can be specified by using any of the standard methods (`docker-compose.yaml`, `docker run -e...`). Additionally, environment variables can also be passed as parameters of `init.sh`.
 
 Passing environment variables to init.sh is usually unnecessary, but is useful for some cloud environments where the full `docker run` command cannot be specified.
 
 Example usage: `docker run -e STANDARD_VAR1="this value" -e STANDARD_VAR2="that value" init.sh EXTRA_VAR="other value"`
+
+## Security
+
+By default, all exposed web services other than the port redirect page are protected by HTTP basic authentication.
+
+The default username is `user` and the password is `password`.
+
+You can set your credentials by passing environment variables as shown above.
+
+The password is stored as a bcrypt hash. If you prefer not to pass a plain text password to the container you can pre-hash and use the variable `WEB_PASSWORD_HASH`.
+
+If you are running the image locally on a trusted network, you may disable authentication by setting the environment variable `WEB_ENABLE_AUTH=false`.
 
 ## Provisioning script
 
@@ -158,8 +174,6 @@ Micromamba environments are particularly useful where several software packages 
 | Environment    | Packages |
 | -------------- | ----------------------------------------- |
 | `base`         | micromamba's base environment |
-| `system`       | `supervisord`, `openssh` `rclone` |
-| `fastapi`      | `logtail web UI`, `port redirector web UI` |
 | `python_[ver]` | `python` |
 
 If you are extending this image or running an interactive session where additional software is required, you should almost certainly create a new environment first. See below for guidance.
@@ -205,6 +219,12 @@ All processes are managed by [supervisord](https://supervisord.readthedocs.io/en
 
 >[!NOTE]  
 >*Some of the included services would not normally be found **inside** of a container. They are, however, necessary here as some cloud providers give no access to the host; Containers are deployed as if they were a virtual machine.*
+
+### Caddy
+
+This is a simple webserver acting as a reverse proxy.
+
+Caddy is used to enable basic authentication for all sensitive web services.
 
 ### Port Redirector
 

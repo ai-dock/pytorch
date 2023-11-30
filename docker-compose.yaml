@@ -48,17 +48,16 @@ services:
     
     ports:
         # SSH available on host machine port 2222 to avoid conflict. Change to suit
-        - ${SSH_PORT_HOST}:${SSH_PORT}
+        - ${SSH_PORT_HOST:-2222}:${SSH_PORT_LOCAL:-22}
         # Web UI for easy service access
-        - ${REDIRECTOR_PORT_HOST:-1111}:1111
+        - ${SERVICEPORTAL_PORT_HOST:-1111}:${SERVICEPORTAL_PORT_HOST:-1111}
         # Rclone webserver for interactive configuration
-        - ${RCLONE_PORT_HOST:-53682}:53682
+        - ${RCLONE_PORT_HOST:-53682}:${RCLONE_PORT_HOST:-53682}
    
     environment:
         # Don't enclose values in quotes
         - DIRECT_ADDRESS=${DIRECT_ADDRESS:-127.0.0.1}
         - DIRECT_ADDRESS_GET_WAN=${DIRECT_ADDRESS_GET_WAN:-false}
-        - SSH_PORT=${SSH_PORT:-22}
         - WORKSPACE=${WORKSPACE:-/workspace}
         - WORKSPACE_SYNC=${WORKSPACE_SYNC:-true}
         - CF_TUNNEL_TOKEN=${CF_TUNNEL_TOKEN:-}
@@ -66,5 +65,10 @@ services:
         - WEB_ENABLE_AUTH=${WEB_ENABLE_AUTH:-true}
         - WEB_USER=${WEB_USER:-user}
         - WEB_PASSWORD=${WEB_PASSWORD:-password}
+        - SSH_PORT_HOST=${SSH_PORT_HOST:-2222}
+        - SSH_PORT_LOCAL=${SSH_PORT_LOCAL:-22}
+        - SERVICEPORTAL_PORT_HOST=${SERVICEPORTAL_PORT_HOST:-1111}
+        - SERVICEPORTAL_PORT_LOCAL=${SERVICEPORTAL_PORT_LOCAL:-11111}
+        - SERVICEPORTAL_METRICS_PORT=${SERVICEPORTAL_METRICS_PORT:-21111}
         - SERVERLESS=${SERVERLESS:-false}
         #- PROVISIONING_SCRIPT=https://raw.githubusercontent.com/ai-dock/pytorch/main/config/provisioning/default.sh

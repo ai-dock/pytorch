@@ -13,9 +13,9 @@ python_lock=$(micromamba -n $MAMBA_DEFAULT_ENV run python -V|awk '{print $2}'|cu
 $MAMBA_INSTALL -n $MAMBA_DEFAULT_ENV \
     -c pytorch \
     -c conda-forge \
-    pytorch=${PYTORCH_VERSION} torchvision torchaudio \
-    python=${python_lock} \
-    --only-deps
+        pytorch=${PYTORCH_VERSION} torchvision torchaudio \
+        python=${python_lock} \
+        --only-deps
 # Now pip install...
 micromamba -n $MAMBA_DEFAULT_ENV run pip install \
     --no-cache-dir \

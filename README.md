@@ -48,9 +48,9 @@ Browse [here](https://github.com/ai-dock/pytorch/pkgs/container/pytorch) for an 
 
 You can also self-build from source by editing `.env` and running `docker compose build`.
 
-Supported Python versions: `3.11`, `3.10`, `3.9`, `3.8`
+Supported Python versions: `3.12`, `3.11`, `3.10`
 
-Supported Pytorch versions: `2.1.0` `2.0.1`, `1.13.1` 
+Supported Pytorch versions: `2.1.1` `2.1.0` `2.0.1`
 
 Supported Platforms: `NVIDIA CUDA`, `AMD ROCm`, `CPU`
 

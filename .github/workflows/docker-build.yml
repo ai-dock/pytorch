@@ -8,9 +8,9 @@ on:
 env:
   UBUNTU_VERSION: 22.04
   BUILDX_NO_DEFAULT_ATTESTATIONS: 1
-  LATEST_CUDA: "2.1.0-py3.11-cuda-12.1.0-base-22.04"
-  LATEST_ROCM: "2.1.0-py3.11-rocm-5.6-runtime-22.04"
-  LATEST_CPU: "2.1.0-py3.11-cpu-22.04"
+  LATEST_CUDA: "2.1.1-py3.12-cuda-12.1.0-base-22.04"
+  LATEST_ROCM: "2.1.1-py3.12-rocm-5.6-runtime-22.04"
+  LATEST_CPU: "2.1.1-py3.12-cpu-22.04"
 
 jobs:
   cpu-base:
@@ -19,17 +19,13 @@ jobs:
       fail-fast: false
       matrix:
         python:
-          - "3.8"
-          - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
         pytorch:
-          - "1.13.1"
           - "2.0.1"
           - "2.1.0"
-        exclude:
-          - pytorch: "1.13.1"
-          - python: "3.11"
+          - "2.1.1"
     steps:
       -
         name: Free Space
@@ -85,31 +81,40 @@ jobs:
       fail-fast: false
       matrix:
         python:
-          - "3.8"
-          - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
         pytorch:
-          - "1.13.1"
           - "2.0.1"
           - "2.1.0"
+          - "2.1.1"
         cuda:
           - "11.7.1"
           - "11.8.0"
           - "12.1.0"
+          - "12.2.0"
         level:
           - "base"
           - "devel"
           - "cudnn8-devel"
         exclude:
-          - pytorch: "1.13.1"
-            python: "3.11"
-          - pytorch: "1.13.1"
-            cuda: "11.8.0"
           - pytorch: "2.0.1"
             cuda: "12.1.0"
+          - pytorch: "2.0.1"
+            cuda: "12.2.0"
           - pytorch: "2.1.0"
             cuda: "11.7.1"
+          - pytorch: "2.1.1"
+            cuda: "11.7.1"
+          - cuda: "12.2.0"
+            level: "cudnn8-devel"
+          - cuda: "12.1.0"
+            level: "devel"
+          - cuda: "11.8.0"
+            level: "devel"
+          - cuda: "11.7.1"
+            level: "devel"
+            
     steps:
       -
         name: Free Space
@@ -164,13 +169,13 @@ jobs:
       fail-fast: false
       matrix:
         python:
-          - "3.8"
-          - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
         pytorch:
           - "2.0.1"
           - "2.1.0"
+          - "2.1.1"
         rocm:
           - "5.4.2"
           - "5.6"
@@ -181,6 +186,8 @@ jobs:
           - pytorch: "2.0.1"
             rocm: "5.6"
           - pytorch: "2.1.0"
+            rocm: "5.4.2"
+          - pytorch: "2.1.1"
             rocm: "5.4.2"
     steps:
       -

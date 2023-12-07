@@ -9,7 +9,7 @@ python_lock=$(micromamba -n $MAMBA_DEFAULT_ENV run python -V|awk '{print $2}'|cu
 
 $MAMBA_INSTALL -n $MAMBA_DEFAULT_ENV \
     -c pytorch \
-    -c conda-forge \
+    -c defaults \
         python=${python_lock} \
         pytorch=${PYTORCH_VERSION} torchvision \
         torchaudio \

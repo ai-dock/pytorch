@@ -6,11 +6,11 @@ services:
       context: ./build
       args:
         IMAGE_BASE: ${IMAGE_BASE:-ghcr.io/ai-dock/python:3.10-cuda-11.8.0-base-22.04}
-        PYTORCH_VERSION: ${PYTORCH_VERSION:-2.1.0}
+        PYTORCH_VERSION: ${PYTORCH_VERSION:-2.1.1}
       tags:
-        - "ghcr.io/ai-dock/pytorch:${IMAGE_TAG:-2.1.0-py3.10-cuda-11.8.0-base-22.04}"
+        - "ghcr.io/ai-dock/pytorch:${IMAGE_TAG:-2.1.1-py3.10-cuda-11.8.0-base-22.04}"
         
-    image: ghcr.io/ai-dock/pytorch:${IMAGE_TAG:-2.1.0-py3.10-cuda-11.8.0-base-22.04}
+    image: ghcr.io/ai-dock/pytorch:${IMAGE_TAG:-2.1.1-py3.10-cuda-11.8.0-base-22.04}
     
     security_opt:
       # For Rclone mount

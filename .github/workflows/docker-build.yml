@@ -8,9 +8,9 @@ on:
 env:
   UBUNTU_VERSION: 22.04
   BUILDX_NO_DEFAULT_ATTESTATIONS: 1
-  LATEST_CUDA: "2.1.1-py3.12-cuda-12.1.0-base-22.04"
-  LATEST_ROCM: "2.1.1-py3.12-rocm-5.6-runtime-22.04"
-  LATEST_CPU: "2.1.1-py3.12-cpu-22.04"
+  LATEST_CUDA: "2.1.1-py3.11-cuda-12.1.0-base-22.04"
+  LATEST_ROCM: "2.1.1-py3.11-rocm-5.6-runtime-22.04"
+  LATEST_CPU: "2.1.1-py3.11-cpu-22.04"
 
 jobs:
   cpu-base:

@@ -32,23 +32,23 @@ Tags follow these patterns:
 ##### _CUDA_
 - `:[pytorch-version]-py[python-version]-cuda-[x.x.x]-base-[ubuntu-version]`
 
-- `:latest-cuda` &rarr; `:2.1.0-py3.10-cuda-11.8.0-base-22.04`
+- `:latest-cuda` &rarr; `:2.1.1-py3.11-cuda-12.1.0-base-22.04`
 
 ##### _ROCm_
 - `:[pytorch-version]-py[python-version]-rocm-[x.x.x]-runtime-[ubuntu-version]`
 
-- `:latest-rocm` &rarr; `:2.1.0-py3.10-rocm-5.6-runtime-22.04`
+- `:latest-rocm` &rarr; `:2.1.1-py3.11-rocm-5.6-runtime-22.04`
 
 ##### _CPU_
 - `:[pytorch-version]-py[python-version]-ubuntu-[ubuntu-version]`
 
-- `:latest-cpu` &rarr; `:2.1.0-py3.10-cpu-22.04` 
+- `:latest-cpu` &rarr; `:2.1.1-py3.11-cpu-22.04` 
 
 Browse [here](https://github.com/ai-dock/pytorch/pkgs/container/pytorch) for an image suitable for your target environment.
 
 You can also self-build from source by editing `.env` and running `docker compose build`.
 
-Supported Python versions: `3.12`, `3.11`, `3.10`
+Supported Python versions: `3.11`, `3.10`
 
 Supported Pytorch versions: `2.1.1` `2.1.0` `2.0.1`
 

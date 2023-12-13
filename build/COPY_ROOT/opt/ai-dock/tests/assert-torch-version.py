@@ -6,3 +6,4 @@ actual_version = torch.__version__
 if not actual_version.startswith(required_version):
     print(f"Expected pytorch v{required_version} but found v{actual_version}")
     exit(1)
+

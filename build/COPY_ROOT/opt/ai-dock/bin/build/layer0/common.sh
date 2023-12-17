@@ -5,7 +5,7 @@
 source /opt/ai-dock/etc/environment.sh
 
 if [[ $PYTORCH_VERSION == "2.0.1" ]]; then
-    ffmpeg_version="4.3"
+    ffmpeg_version="4.4"
 else
     ffmpeg_version="6.*"
 fi

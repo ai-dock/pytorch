@@ -12,9 +12,6 @@ LABEL maintainer="Rob Ballantyne <rob@dynamedia.uk>"
 ENV IMAGE_SLUG="pytorch"
 # Note: the default mamba environment is set by ai-dock/python
 
-# Add new paths at front 
-#ENV PATH=/opt/another/bin:$PATH
-
 # Copy early so we can use scripts in the build - Changes to these files will invalidate the cache and cause a rebuild.
 COPY ./COPY_ROOT/ /
 

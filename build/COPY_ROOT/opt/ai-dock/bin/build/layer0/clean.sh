@@ -1,7 +1,4 @@
-#!/bin/bash
-
-# Must exit and fail to build if any command fails
-set -eo pipefail
+#!/bin/false
 
 # Tidy up and keep image small
 apt-get clean -y

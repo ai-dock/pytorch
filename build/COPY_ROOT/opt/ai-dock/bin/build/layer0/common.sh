@@ -1,8 +1,17 @@
-#!/bin/bash
-
-# Must exit and fail to build if any command fails
-set -eo pipefail
+#!/bin/false
 
 # For logic common to cpu, cuda & rocm
 
-exit 0
+source /opt/ai-dock/etc/environment.sh
+
+if [[ $PYTORCH_VERSION == "2.0.1" ]]; then
+    ffmpeg_version="4.3"
+else
+    ffmpeg_version="6.*"
+fi
+
+export MAMBA_CREATE="micromamba create --always-softlink -y -c pytorch -c conda-forge"
+export MAMBA_INSTALL="micromamba install --always-softlink -y -c pytorch -c conda-forge"
+printf "export MAMBA_CREATE=\"%s\"\n" "${MAMBA_CREATE}" >> /opt/ai-dock/etc/environment.sh
+printf "export MAMBA_INSTALL=\"%s\"\n" "${MAMBA_INSTALL}" >> /opt/ai-dock/etc/environment.sh
+

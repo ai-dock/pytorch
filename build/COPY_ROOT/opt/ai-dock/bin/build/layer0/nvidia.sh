@@ -12,5 +12,4 @@ python_lock=$(micromamba -n $MAMBA_DEFAULT_ENV run python -V|awk '{print $2}'|cu
 $MAMBA_INSTALL -n $MAMBA_DEFAULT_ENV \
     pytorch=${PYTORCH_VERSION} torchvision torchaudio \
     python=${python_lock} \
-    pytorch-cuda=${cuda_short_version} \
-    ffmpeg="$ffmpeg_version"
+    pytorch-cuda=${cuda_short_version}

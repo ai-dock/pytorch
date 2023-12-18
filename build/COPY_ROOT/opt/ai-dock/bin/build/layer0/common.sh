@@ -15,3 +15,7 @@ export MAMBA_INSTALL="micromamba install --always-softlink -y -c pytorch -c cond
 printf "export MAMBA_CREATE=\"%s\"\n" "${MAMBA_CREATE}" >> /opt/ai-dock/etc/environment.sh
 printf "export MAMBA_INSTALL=\"%s\"\n" "${MAMBA_INSTALL}" >> /opt/ai-dock/etc/environment.sh
 
+
+$MAMBA_INSTALL -n $MAMBA_DEFAULT_ENV \
+    ffmpeg="$ffmpeg_version" \
+    sox=14.4.2

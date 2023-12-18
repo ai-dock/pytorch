@@ -13,8 +13,7 @@ $MAMBA_INSTALL -n $MAMBA_DEFAULT_ENV \
         --only-deps
         
 $MAMBA_INSTALL -n $MAMBA_DEFAULT_ENV \
-    python=${python_lock} \
-    ffmpeg="$ffmpeg_version"
+    python=${python_lock}
     
 # Now pip install...
 micromamba -n $MAMBA_DEFAULT_ENV run pip install \

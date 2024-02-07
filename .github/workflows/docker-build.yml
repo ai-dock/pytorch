@@ -8,7 +8,7 @@ on:
 env:
   UBUNTU_VERSION: 22.04
   BUILDX_NO_DEFAULT_ATTESTATIONS: 1
-  LATEST_CUDA: "2.1.1-py3.11-cuda-12.1.0-base-22.04"
+  LATEST_CUDA: "2.1.1-py3.11-cuda-12.2.0-base-22.04"
   LATEST_ROCM: "2.1.1-py3.11-rocm-5.6-runtime-22.04"
   LATEST_CPU: "2.1.1-py3.11-cpu-22.04"
 
@@ -83,30 +83,16 @@ jobs:
           - "3.10"
           - "3.11"
         pytorch:
-          - "2.0.1"
           - "2.1.0"
           - "2.1.1"
         cuda:
-          - "11.7.1"
           - "11.8.0"
           - "12.1.0"
+          - "12.2.0"
         level:
           - "base"
+          - "runtime"
           - "devel"
-          - "cudnn8-devel"
-        exclude:
-          - pytorch: "2.0.1"
-            cuda: "12.1.0"
-          - pytorch: "2.1.0"
-            cuda: "11.7.1"
-          - pytorch: "2.1.1"
-            cuda: "11.7.1"
-          - cuda: "12.1.0"
-            level: "devel"
-          - cuda: "11.8.0"
-            level: "devel"
-          - cuda: "11.7.1"
-            level: "devel"
             
     steps:
       -
@@ -165,22 +151,13 @@ jobs:
           - "3.10"
           - "3.11"
         pytorch:
-          - "2.0.1"
           - "2.1.0"
           - "2.1.1"
         rocm:
-          - "5.4.2"
           - "5.6"
         level:
           - "runtime"
-        # Templating for future releases
-        exclude:
-          - pytorch: "2.0.1"
-            rocm: "5.6"
-          - pytorch: "2.1.0"
-            rocm: "5.4.2"
-          - pytorch: "2.1.1"
-            rocm: "5.4.2"
+
     steps:
       -
         name: Free Space

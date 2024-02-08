@@ -37,7 +37,7 @@ Tags follow these patterns:
 ##### _ROCm_
 - `:[pytorch-version]-py[python-version]-rocm-[x.x.x]-runtime-[ubuntu-version]`
 
-- `:latest-rocm` &rarr; `:2.1.2-py3.12-rocm-5.6-runtime-22.04`
+- `:latest-rocm` &rarr; `:2.2.0-py3.12-rocm-5.7-runtime-22.04`
 
 ##### _CPU_
 - `:[pytorch-version]-py[python-version]-ubuntu-[ubuntu-version]`

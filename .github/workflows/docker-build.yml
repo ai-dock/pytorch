@@ -9,7 +9,7 @@ env:
   UBUNTU_VERSION: 22.04
   BUILDX_NO_DEFAULT_ATTESTATIONS: 1
   LATEST_CUDA: "2.2.0-py3.12-cuda-12.2.0-base-22.04"
-  LATEST_ROCM: "2.1.2-py3.11-rocm-5.6-runtime-22.04"
+  LATEST_ROCM: "2.2.0-py3.12-rocm-6.0.2-runtime-22.04"
   LATEST_CPU: "2.2.0-py3.12-cpu-22.04"
 
 jobs:
@@ -162,12 +162,22 @@ jobs:
         python:
           - "3.10"
           - "3.11"
+          - "3.12"
         pytorch:
           - "2.1.2"
+          - "2.2.0"
         rocm:
           - "5.6"
+          - "5.7"
         level:
           - "runtime"
+        exclude:
+          - pytorch: "2.2.0"
+            rocm: "5.6"
+          - pytorch: "2.1.2"
+            rocm: "5.7"
+          - python: "3.12"
+            rocm: "5.6"
 
     steps:
       -

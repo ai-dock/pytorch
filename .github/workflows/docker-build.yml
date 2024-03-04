@@ -8,9 +8,9 @@ on:
 env:
   UBUNTU_VERSION: 22.04
   BUILDX_NO_DEFAULT_ATTESTATIONS: 1
-  LATEST_CUDA: "2.2.0-py3.12-cuda-12.2.0-base-22.04"
-  LATEST_ROCM: "2.2.0-py3.12-rocm-6.0.2-runtime-22.04"
-  LATEST_CPU: "2.2.0-py3.12-cpu-22.04"
+  LATEST_CUDA: "2.2.1-py3.12-cuda-12.2.0-base-22.04"
+  LATEST_ROCM: "2.2.1-py3.12-rocm-6.0.2-runtime-22.04"
+  LATEST_CPU: "2.2.1-py3.12-cpu-22.04"
 
 jobs:
   cpu-base:
@@ -23,12 +23,9 @@ jobs:
           - "3.11"
           - "3.12"
         pytorch:
-          - "2.1.1"
           - "2.1.2"
-          - "2.2.0"
+          - "2.2.1"
         exclude:
-          - python: "3.12"
-            pytorch: "2.1.1"
           - python: "3.12"
             pytorch: "2.1.2"
     steps:
@@ -98,9 +95,8 @@ jobs:
           - "3.11"
           - "3.12"
         pytorch:
-          - "2.1.1"
           - "2.1.2"
-          - "2.2.0"
+          - "2.2.1"
         cuda:
           - "11.8.0"
           - "12.1.0"
@@ -109,8 +105,6 @@ jobs:
           - "runtime"
           - "devel"
         exclude:
-          - python: "3.12"
-            pytorch: "2.1.1"
           - python: "3.12"
             pytorch: "2.1.2"
             
@@ -181,14 +175,14 @@ jobs:
           - "3.12"
         pytorch:
           - "2.1.2"
-          - "2.2.0"
+          - "2.2.1"
         rocm:
           - "5.6"
           - "5.7"
         level:
           - "runtime"
         exclude:
-          - pytorch: "2.2.0"
+          - pytorch: "2.2.1"
             rocm: "5.6"
           - pytorch: "2.1.2"
             rocm: "5.7"

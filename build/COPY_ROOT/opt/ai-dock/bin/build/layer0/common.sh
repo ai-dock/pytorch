@@ -18,4 +18,5 @@ printf "export MAMBA_INSTALL=\"%s\"\n" "${MAMBA_INSTALL}" >> /opt/ai-dock/etc/en
 
 $MAMBA_INSTALL -n $MAMBA_DEFAULT_ENV \
     ffmpeg="$ffmpeg_version" \
-    sox=14.4.2
+    sox=14.4.2 \
+    ocl-icd-system

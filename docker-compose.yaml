@@ -2,15 +2,16 @@ version: "3.8"
 # Compose file build variables set in .env
 services:
   supervisor:
+    platform: linux/amd64
     build:
       context: ./build
       args:
-        IMAGE_BASE: ${IMAGE_BASE:-ghcr.io/ai-dock/python:3.10-cuda-11.8.0-base-22.04}
+        IMAGE_BASE: ${IMAGE_BASE:-ghcr.io/ai-dock/python:3.10-cuda-11.8.0-runtime-22.04}
         PYTORCH_VERSION: ${PYTORCH_VERSION:-2.1.1}
       tags:
-        - "ghcr.io/ai-dock/pytorch:${IMAGE_TAG:-2.1.1-py3.10-cuda-11.8.0-base-22.04}"
+        - "ghcr.io/ai-dock/pytorch:${IMAGE_TAG:-2.1.1-py3.10-cuda-11.8.0-runtime-22.04}"
         
-    image: ghcr.io/ai-dock/pytorch:${IMAGE_TAG:-2.1.1-py3.10-cuda-11.8.0-base-22.04}
+    image: ghcr.io/ai-dock/pytorch:${IMAGE_TAG:-2.1.1-py3.10-cuda-11.8.0-runtime-22.04}
     
     ## For Nvidia GPU's - You probably want to uncomment this
     #deploy:

@@ -15,6 +15,8 @@ export MAMBA_INSTALL="micromamba install --always-softlink -y -c pytorch -c cond
 printf "export MAMBA_CREATE=\"%s\"\n" "${MAMBA_CREATE}" >> /opt/ai-dock/etc/environment.sh
 printf "export MAMBA_INSTALL=\"%s\"\n" "${MAMBA_INSTALL}" >> /opt/ai-dock/etc/environment.sh
 
+python_version="$(micromamba -n $MAMBA_DEFAULT_ENV run python -V | tail -n1 | awk '{print $2}' | cut -d '.' -f1,2)"
+printf "/opt/micromamba/envs/%s/lib/python%s/site-packages/torch/lib/\n" "$MAMBA_DEFAULT_ENV" "$python_version" >> /etc/ld.so.conf.d/x86_64-linux-gnu.micromamba.80-pytorch.conf
 
 $MAMBA_INSTALL -n $MAMBA_DEFAULT_ENV \
     ffmpeg="$ffmpeg_version" \

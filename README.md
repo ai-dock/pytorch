@@ -48,6 +48,7 @@ Supported Platforms: `NVIDIA CUDA`, `AMD ROCm`, `CPU`
 **Vast.​ai**
 
 [pytorch:latest-cuda](https://link.ai-dock.org/template-vast-pytorch) (CUDA)
+
 [pytorch:latest-rocm](https://link.ai-dock.org/template-vast-pytorch-rocm) (ROCm)
 
 **Runpod.​io**
